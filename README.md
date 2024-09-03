@@ -1,4 +1,3 @@
-=======
 # Sistema de Mantenimiento de Aeronaves
 ## Instalación
 
