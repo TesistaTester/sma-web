@@ -7,25 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-class Aeronave extends Model
+class FabricanteComponente extends Model
 {
     use HasFactory;
     use LogsActivity;
 
-    protected $table = "aeronave";
-    protected $primaryKey = "ae_id";
+    protected $table = "fabricante_componente";
+    protected $primaryKey = "fac_id";
 
     //logs auditoria para todos los valores de cada tabla
     public function getActivitylogOptions(): LogOptions{return LogOptions::defaults()->logOnly(['*']);}
 
-    public function detalles(){
-        return $this->hasMany(DetalleGrupoAeronave::class, 'ae_id');
-    }
-    public function horas_diario(){
-        return $this->hasMany(RegistroVueloDiario::class, 'ae_id');
-    }
-    public function inventarios(){
-        return $this->hasMany(InventarioAeronave::class, 'ae_id');
+    public function componentes(){
+        return $this->hasMany(Componente::class, 'fac_id');
     }
 
 }

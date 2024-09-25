@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AeronaveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\PersonalController;
@@ -12,7 +13,8 @@ use App\Http\Controllers\OrdenController;
 use App\Http\Controllers\InspeccionController;
 use App\Http\Controllers\SeguimientoController;
 use App\Http\Controllers\MonitoreoController;
-
+use App\Http\Controllers\GrupoAereoController;
+use App\Models\GrupoAereo;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,9 +63,16 @@ Route::get('/personal/{id}/nuevo_destino', [PersonalController::class ,'nuevo_de
 Route::resource('/personal', PersonalController::class)->middleware('auth');
 /*
 ----------------------------------------
+* RUTAS: AERONAVES
+----------------------------------------
+*/
+Route::resource('/aeronaves', AeronaveController::class)->middleware('auth');
+/*
+----------------------------------------
 * RUTAS: ADMINISTRATIVO
 ----------------------------------------
 */
+Route::resource('/grupos', GrupoAereoController::class)->middleware('auth');
 Route::resource('/unidades', UnidadController::class)->middleware('auth');
 Route::resource('/cargos', CargoController::class)->middleware('auth');
 /*

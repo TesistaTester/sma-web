@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aeronave;
 use Illuminate\Http\Request;
 
 class AeronaveController extends Controller
 {
+    private $modulo = "aeronaves";
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +15,11 @@ class AeronaveController extends Controller
      */
     public function index()
     {
-        //
+        $aeronaves = Aeronave::all();      
+        return view('aeronaves.lista_aeronaves', ['titulo'=>'ADMINISTRAR AERONAVES',
+                                                          'aeronaves' => $aeronaves,
+                                                          'modulo_activo' => $this->modulo
+                                                         ]);
     }
 
     /**

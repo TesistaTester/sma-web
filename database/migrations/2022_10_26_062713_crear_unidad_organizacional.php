@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('unidad_organizacional', function (Blueprint $table) {
             $table->Increments('uor_id');
             $table->integer('uor_superior');
+            $table->integer('gru_id')->nullable();
             $table->text('uor_nombre');
             $table->timestamps();
             $table->softDeletes();
