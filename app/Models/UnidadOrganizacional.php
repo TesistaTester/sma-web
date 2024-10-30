@@ -22,4 +22,8 @@ class UnidadOrganizacional extends Model
         return $this->hasMany(Cargo::class, 'uor_id');
     }
 
+    public function grupo(){
+        return $this->belongsTo(GrupoAereo::class, 'gru_id');
+    }
+
 }

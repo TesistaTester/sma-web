@@ -25,16 +25,36 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group">
-															<label class="label-blue label-block" for="">
-																Sección o unidad superior:
-																<span class="text-danger">*</span>
-																<i class="fa fa-question-circle float-right" title="Establecer la sección o unidad superior a la registrada actualmente"></i>
-															</label>
+														<label class="label-blue label-block" for="">
+															Grupo aéreo:
+															<span class="text-danger">*</span>
+															<i class="fa fa-question-circle float-right" title="Establecer el grupo aereo"></i>
+														</label>
+														<select required class="form-control @error('gru_id') is-invalid @enderror" name="gru_id" id="gru_id">
+															<option value="">Seleccione una opción</option>
+															@foreach ($grupos as $item)
+															<option value="{{$item->gru_id}}" {{ old('gru_id') == $item->gru_id ? 'selected' : '' }}>{{$item->gru_nombre}}</option>
+															@endforeach
+														</select>
+														@error('gru_id')
+														<div class="invalid-feedback">
+															{{$message}}
+														</div>											
+														@enderror
+													</div>
+												</div>
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="label-blue label-block" for="">
+															Sección o unidad superior:
+															<span class="text-danger">*</span>
+															<i class="fa fa-question-circle float-right" title="Establecer la sección o unidad superior a la registrada actualmente"></i>
+														</label>
 														<select required class="form-control @error('uor_superior') is-invalid @enderror" name="uor_superior" id="uor_superior">
 															<option value="">Seleccione una opción</option>
 															<option value="9999999">Ninguna</option>
 															@foreach ($unidades as $item)
-															<option value="{{$item->uor_id}}" {{ old('uor_superior') == $item->uor_id ? 'selected' : '' }}>{{$item->uor_nombre}}</option>
+															<option value="{{$item->uor_id}}" {{ old('uor_superior') == $item->uor_id ? 'selected' : '' }}>{{$item->grupo->gru_nombre}} - {{$item->uor_nombre}}</option>
 															@endforeach
 														</select>
 														@error('uor_superior')

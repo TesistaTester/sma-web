@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GrupoAereo;
 use App\Models\UnidadOrganizacional;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -19,7 +20,7 @@ class UnidadController extends Controller
         //verificar si esta logueado el usuario
         // if(!Auth::check()){return redirect('/');}
 
-        $unidades = UnidadOrganizacional::all();      
+        $unidades = UnidadOrganizacional::all();
         return view('unidades.lista_unidades', ['titulo'=>'Gestionar de secciones',
                                                           'unidades' => $unidades,
                                                           'modulo_activo' => $this->modulo
@@ -38,9 +39,11 @@ class UnidadController extends Controller
 
         $titulo = 'NUEVA SECCIÓN O UNIDAD';
         $unidades = UnidadOrganizacional::all();
+        $grupos = GrupoAereo::all();      
 
         return view('unidades.form_nueva_unidad', ['titulo'=>$titulo, 
                                                    'unidades' => $unidades,
+                                                   'grupos' => $grupos,
                                                    'modulo_activo' => $this->modulo
                                                  ]);
     }
@@ -58,6 +61,7 @@ class UnidadController extends Controller
 
         //guardar unidad
         $unidad = new UnidadOrganizacional();
+        $unidad->gru_id = $request->input('gru_id');
         $unidad->uor_superior = $request->input('uor_superior');
         $unidad->uor_nombre = $request->input('uor_nombre');
         $unidad->save();

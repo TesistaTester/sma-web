@@ -94,7 +94,11 @@
                                           foreach($inspeccion->ordenes as $orden){
                                               $acumulado = $acumulado + $orden->ort_avance;
                                           }
-                                          $avance_orden = round(($acumulado/$total), 0);
+                                          if($total == 0){
+                                            $avance_orden = 0;
+                                          }else{
+                                            $avance_orden = round(($acumulado/$total), 0);
+                                          }
                                           @endphp     
                                           <div class="card-body text-center">
                                             <div class="text-center text-info">

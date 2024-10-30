@@ -31,6 +31,7 @@
                             <table class="table table-bordered tabla-datos">
                                 <thead>
                                 <tr>
+                                    <th>GRUPO AEREO</th>
                                     <th>SECCION SUPERIOR</th>
                                     <th>NOMBRE SECCIÓN / UNIDAD</th>
                                     <th>OPCION</th>
@@ -39,6 +40,9 @@
                                 <tbody>
                                 @foreach($unidades as $item)
                                 <tr>
+                                    <td class="text-center">
+                                        {{$item->grupo->gru_nombre}}
+                                    </td>
                                     <td>
                                         @if (is_null($item->uor_superior) || $item->uor_superior == 9999999)
                                         <small>---</small>

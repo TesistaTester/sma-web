@@ -21,7 +21,7 @@ class RegistroVuelo extends Model
     public function registros_vuelo_componente(){
         return $this->hasMany(RegistroVueloComponente::class, 'rvu_id');
     }
-    public function registros_vuelo_diario(){
+    public function registro_vuelo_diario(){
         return $this->belongsTo(RegistroVueloDiario::class, 'rvd_id');
     }
 

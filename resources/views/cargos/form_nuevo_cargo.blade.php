@@ -33,7 +33,7 @@
 														<select required class="form-control @error('uor_id') is-invalid @enderror" name="uor_id" id="uor_id">
 															<option value="">Seleccione una opción</option>
 															@foreach ($unidades as $item)
-															<option value="{{$item->uor_id}}" {{ old('uor_id') == $item->uor_id ? 'selected' : '' }}>{{$item->uor_nombre}}</option>
+															<option value="{{$item->uor_id}}" {{ old('uor_id') == $item->uor_id ? 'selected' : '' }}>{{$item->grupo->gru_nombre}} - {{$item->uor_nombre}}</option>
 															@endforeach
 														</select>
 														@error('uor_id')

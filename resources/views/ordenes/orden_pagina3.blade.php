@@ -48,13 +48,13 @@
 			<div class="row">
 				<div class="col-md-4 text-center">
 					<h6>
-						<b>FUERZA AEREA BOLIVIANA</b>
+						{{-- <b>FUERZA AEREA BOLIVIANA</b>
 						<br>
 						<small>
 						TRANSPORTES AEREOS BOLIVIANOS
 						<br>
 						<b>BOLIVIA</b>
-						</small>
+						</small> --}}
 					</h6>
 				</div>
 				<div class="col-md-5 text-center">

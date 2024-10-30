@@ -23,4 +23,16 @@ class Componente extends Model
         return $this->belongsTo(FabricanteComponente::class, 'rvu_id');
     }
 
+    public function registros_vuelo(){
+        return $this->hasMany(RegistroVueloComponente::class, 'com_id');
+    }
+
+    public function configuraciones_mantenimiento(){
+        return $this->hasMany(ConfiguracionMantenimiento::class, 'com_id');
+    }
+
+    public function servicios(){
+        return $this->hasMany(ServicioComponente::class, 'com_id');
+    }
+
 }

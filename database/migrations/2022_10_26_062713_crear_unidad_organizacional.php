@@ -20,6 +20,9 @@ return new class extends Migration
             $table->text('uor_nombre');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('cat_id')->references('cat_id')->on('categoria_aeronave');
+            $table->foreign('tia_id')->references('tia_id')->on('tipo_aeronave');
+            $table->foreign('faa_id')->references('faa_id')->on('fabricante_aeronave');
         });
     }
 

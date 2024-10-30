@@ -57,7 +57,11 @@
                                         </div>        
                                         <div class="card-body">
                                             <h4 class="text-center">
+                                            @if($total == 0)
+                                            <div class="box-actividad" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:{{(round(0, 2)*100)}}"></div>                                                    
+                                            @else
                                             <div class="box-actividad" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="--value:{{(round($terminados/$total, 2)*100)}}"></div>                                                    
+                                            @endif 
                                             </h4>                                    
                                         </div>
                                     </div>

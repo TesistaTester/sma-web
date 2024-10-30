@@ -62,15 +62,15 @@
                         @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                         <a class="nav-item nav-link @if($modulo_activo == 'aeronaves'): active @endif" href="{{url('aeronaves')}}"><i class="fa fa-plane"></i> AERONAVES</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        {{-- @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                         <a class="nav-item nav-link @if($modulo_activo == 'horas'): active @endif" href="{{url('horas')}}"><i class="fa fa-clock-o"></i> HORAS DE VUELO</a>
-                        @endif
+                        @endif --}}
                         @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                         <a class="nav-item nav-link @if($modulo_activo == 'ordenes'): active @endif" href="{{url('ordenes')}}"><i class="fa fa-wrench"></i> ORDENES</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        {{-- @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                         <a class="nav-item nav-link @if($modulo_activo == 'inspecciones'): active @endif" href="{{url('inspecciones')}}"><i class="fa fa-check"></i> INSPECCIONES</a>
-                        @endif
+                        @endif --}}
                         @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                         <a class="nav-item nav-link @if($modulo_activo == 'tarjetas'): active @endif" href="{{url('tarjetas')}}"><i class="fa fa-tags"></i> TARJETAS</a>
                         @endif

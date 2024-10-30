@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('com_serial_number')->nullable();
             $table->text('com_part_number')->nullable();
             $table->text('com_descripcion')->nullable();
-            $table->text('com_modelo')->nullable();
+            // $table->text('com_modelo')->nullable();
             $table->integer('com_tipo_componente')->nullable();
             $table->integer('com_master')->nullable();
             $table->integer('com_principal')->nullable();

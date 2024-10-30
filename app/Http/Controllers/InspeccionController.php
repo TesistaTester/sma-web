@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aeronave;
+use App\Models\Componente;
+use App\Models\ConfiguracionMantenimiento;
 use App\Models\Inspeccion;
+use App\Models\ServicioComponente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+
+use function PHPUnit\Framework\isNull;
 
 class InspeccionController extends Controller
 {
@@ -20,11 +26,32 @@ class InspeccionController extends Controller
         // if(!Auth::check()){return redirect('/');}
 
         $inspecciones = Inspeccion::all();      
-        return view('inspecciones.lista_inspecciones', ['titulo'=>'Gestionar inspecciones',
+        return view('inspecciones.lista_inspecciones', ['titulo'=>'Inspecciones registradas',
                                                           'inspecciones' => $inspecciones,
                                                           'modulo_activo' => $this->modulo
                                                          ]);
     }
+
+    public function inspecciones_componente($ae_id, $com_id, $cma_id)
+    {
+        $ae_id = Crypt::decryptString($ae_id);
+        $com_id = Crypt::decryptString($com_id);
+        $cma_id = Crypt::decryptString($cma_id);
+
+        $aeronave = Aeronave::where('ae_id', $ae_id)->first();
+        $componente = Componente::where('com_id', $com_id)->first();
+        $mantenimiento = ConfiguracionMantenimiento::where('cma_id', $com_id)->first();
+        $inspecciones = Inspeccion::where('cma_id', $cma_id)->get();    
+
+        return view('inspecciones.lista_inspecciones_componente', ['titulo'=>'Inspecciones del componente',
+                                                          'inspecciones' => $inspecciones,
+                                                          'aeronave' => $aeronave,
+                                                          'componente' => $componente,
+                                                          'mantenimiento' => $mantenimiento,
+                                                          'modulo_activo' => 'aeronaves'
+                                                         ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -43,6 +70,29 @@ class InspeccionController extends Controller
                                                  ]);
     }
 
+
+    public function nueva_inspeccion_componente($ae_id, $com_id, $cma_id)
+    {
+        $titulo = 'NUEVA INSPECCION';
+
+        $ae_id = Crypt::decryptString($ae_id);
+        $com_id = Crypt::decryptString($com_id);
+        $cma_id = Crypt::decryptString($cma_id);
+
+        $aeronave = Aeronave::where('ae_id', $ae_id)->first();
+        $componente = Componente::where('com_id', $com_id)->first();
+        $mantenimiento = ConfiguracionMantenimiento::where('cma_id', $com_id)->first();
+        $servicio = ServicioComponente::where('com_id', $com_id)->latest()->first();
+
+        return view('inspecciones.form_nueva_inspeccion_componente', ['titulo'=>$titulo, 
+                                                                      'aeronave' => $aeronave,
+                                                                      'componente' => $componente,
+                                                                      'servicio' => $servicio,
+                                                                      'mantenimiento' => $mantenimiento,
+                                                                      'modulo_activo' => $this->modulo
+                                                 ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -56,10 +106,17 @@ class InspeccionController extends Controller
 
         //guardar inspeccion
         $inspeccion = new Inspeccion();
+        $inspeccion->cma_id = $request->input('cma_id');
+        $inspeccion->sec_id = $request->input('sec_id');
         $inspeccion->ins_nombre = $request->input('ins_nombre');
         $inspeccion->ins_descripcion = $request->input('ins_descripcion');
         $inspeccion->save();
-        return redirect('inspecciones');
+
+        if(isNull($request->input('cma_id')) || isNull($request->input('cma_id'))){
+            return redirect('inspecciones');
+        }else{
+            return redirect('aeronaves/'.Crypt::encryptString($request->input('ae_id')).'/componentes/'.Crypt::encryptString($request->input('ae_id')).'/mantenimientos/'.Crypt::encryptString($request->input('cma_id')).'/inspecciones');            
+        }
     }
 
     /**

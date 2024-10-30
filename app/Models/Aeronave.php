@@ -28,4 +28,15 @@ class Aeronave extends Model
         return $this->hasMany(InventarioAeronave::class, 'ae_id');
     }
 
+    public function tipo(){
+        return $this->belongsTo(TipoAeronave::class, 'tia_id');
+    }
+    public function categoria(){
+        return $this->belongsTo(CategoriaAeronave::class, 'cae_id');
+    }
+    public function fabricante(){
+        return $this->belongsTo(FabricanteAeronave::class, 'faa_id');
+    }
+
+
 }

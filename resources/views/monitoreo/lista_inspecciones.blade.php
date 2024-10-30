@@ -13,6 +13,7 @@
                 <!-- inicio card  -->
                 <div class="card card-stat">
                     <div class="card-body">
+                        Hay {{$inspecciones->count()}} inspecciones
                         @if($inspecciones->count() == 0)
                         <div class="alert alert-info">
                             <div class="media">
@@ -27,7 +28,7 @@
                         </div>
                         @else
                         <div class="table-responsive">
-                            <table class="table table-bordered tabla-datos">
+                            <table class="table table-bordered">
                                 <thead>
                                 <tr style="font-size:15px; text-align:center;">
                                     <th>INSPECCION</th>
@@ -38,14 +39,19 @@
                                 </thead>
                                 <tbody>
                                 @foreach($inspecciones as $item)
-                                @if ($item->ordenes->count() > 0)
+                                @if (true)
+                                {{-- @if ($item->ordenes->count() > 0) --}}
                                 @php
                                 $total = $item->ordenes->count();
                                 $acumulado = 0;
                                 foreach($item->ordenes as $orden){
                                     $acumulado = $acumulado + $orden->ort_avance;
                                 }
-                                $avance_item = round(($acumulado/$total), 0);
+                                if($total == 0){
+                                    $avance_item = 0;
+                                }else{
+                                    $avance_item = round(($acumulado/$total), 0);
+                                }
                                 @endphp
                                     <tr>                                
                                     <td class="text-center">

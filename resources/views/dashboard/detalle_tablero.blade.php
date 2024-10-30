@@ -16,6 +16,32 @@
                             <div class="row">
                               <div class="col-md-3">
                                 <div class="box-result">
+                                    <h1>{{$grupos->count()}}</h1>
+                                    GRUPOS REGISTRADOS
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                  <div class="box-result">
+                                      <h1>{{$aeronaves->count()}}</h1>
+                                      AERONAVES REGISTRADAS
+                                  </div>
+                                </div>
+                                <div class="col-md-3">
+                                  <div class="box-result">
+                                      <h1>{{$componentes->count()}}</h1>
+                                      COMPONENTES CONTROLADOS
+                                  </div>
+                                </div>
+                                <div class="col-md-3">
+                                  <div class="box-result">
+                                      <h1>{{$registros_vuelo->count()}}</h1>
+                                      REGISTROS DE HORAS VUELO
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-3">
+                                <div class="box-result">
                                     @php
                                       $cont_inspecciones_abiertas = 0;
                                       foreach($inspecciones as $item){

@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aeronave;
 use Illuminate\Http\Request;
 use App\Models\Componente;
 use App\Models\Destino;
 use App\Models\Foja;
 use App\Models\Funcionario;
 use App\Models\Grupo;
+use App\Models\GrupoAereo;
 use App\Models\Inspeccion;
 use App\Models\OrdenTrabajo;
 use App\Models\Personal;
+use App\Models\RegistroVuelo;
 use App\Models\Salida;
 use App\Models\StockComponente;
 use App\Models\Subalmacen;
@@ -32,6 +35,10 @@ class DashboardController extends Controller
         // if(!Auth::check()){return redirect('/');}
 
         $usuarios = Auth::user();
+        $grupos = GrupoAereo::all();
+        $aeronaves = Aeronave::all();
+        $componentes = Componente::all();
+        $registros_vuelo = RegistroVuelo::all();
         $personal = Funcionario::all();
         $inspecciones = Inspeccion::all();
         $ordenes = OrdenTrabajo::all();
@@ -41,6 +48,10 @@ class DashboardController extends Controller
         return view('dashboard.detalle_tablero', [
                                                     'usuarios'=>$usuarios, 
                                                     'titulo'=>$titulo, 
+                                                    'grupos'=> $grupos,
+                                                    'aeronaves'=> $aeronaves,
+                                                    'componentes'=> $componentes,
+                                                    'registros_vuelo'=> $registros_vuelo,
                                                     'personal'=>$personal,
                                                     'tarjetas' => $tarjetas,
                                                     'ordenes' => $ordenes,

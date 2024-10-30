@@ -8,13 +8,20 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UnidadController;
 use App\Http\Controllers\CargoController;
+use App\Http\Controllers\ComponenteController;
+use App\Http\Controllers\ConfiguracionMantenimientoController;
 use App\Http\Controllers\TarjetaController;
 use App\Http\Controllers\OrdenController;
 use App\Http\Controllers\InspeccionController;
 use App\Http\Controllers\SeguimientoController;
 use App\Http\Controllers\MonitoreoController;
 use App\Http\Controllers\GrupoAereoController;
+use App\Http\Controllers\RegistroVueloController;
+use App\Http\Controllers\RegistroVueloDiarioController;
+use App\Http\Controllers\ServicioComponenteController;
 use App\Models\GrupoAereo;
+use App\Models\RegistroVueloDiario;
+use App\Models\ServicioComponente;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,12 +68,57 @@ Route::delete('/destinos/{id}', [PersonalController::class ,'destroy_destino'])-
 Route::post('/destinos', [PersonalController::class ,'store_destino'])->middleware('auth');
 Route::get('/personal/{id}/nuevo_destino', [PersonalController::class ,'nuevo_destino'])->middleware('auth');
 Route::resource('/personal', PersonalController::class)->middleware('auth');
+
+/*
+----------------------------------------
+* RUTAS: COMPONENTES
+----------------------------------------
+*/
+Route::get('aeronaves/{ae_id}/componentes/{com_id}/mantenimientos/{cma_id}/inspecciones', [InspeccionController::class, 'inspecciones_componente'])->middleware('auth');
+Route::get('aeronaves/{ae_id}/componentes/{com_id}/mantenimientos/{cma_id}/nueva_inspeccion', [InspeccionController::class, 'nueva_inspeccion_componente'])->middleware('auth');
+Route::get('/inspecciones', [InspeccionController::class, 'index'])->middleware('auth');
+Route::post('/inspecciones', [InspeccionController::class, 'store'])->middleware('auth');
+// Route::resource('/inspecciones', InspeccionController::class)->middleware('auth');
+
+
+Route::put('mantenimientos/{cma_id}', [ConfiguracionMantenimientoController::class, 'update'])->middleware('auth');
+Route::delete('mantenimientos/{cma_id}', [ConfiguracionMantenimientoController::class, 'destroy'])->middleware('auth');
+Route::post('aeronaves/{ae_id}/componentes/{com_id}/mantenimientos', [ConfiguracionMantenimientoController::class, 'store'])->middleware('auth');
+Route::get('aeronaves/{ae_id}/componentes/{com_id}/mantenimientos/editar', [ConfiguracionMantenimientoController::class, 'edit'])->middleware('auth');
+Route::get('aeronaves/{ae_id}/componentes/{com_id}/mantenimientos/nuevo', [ConfiguracionMantenimientoController::class, 'create'])->middleware('auth');
+Route::get('aeronaves/{ae_id}/componentes/{com_id}/mantenimientos', [ConfiguracionMantenimientoController::class, 'index'])->middleware('auth');
+Route::post('aeronaves/{id}/componentes/{id1}/servicios', [ServicioComponenteController::class, 'store'])->middleware('auth');
+Route::get('aeronaves/{id}/componentes/{id1}/servicios/nuevo', [ServicioComponenteController::class, 'create'])->middleware('auth');
+Route::get('aeronaves/{id}/componentes/{id1}/servicios', [ServicioComponenteController::class, 'index'])->middleware('auth');
+Route::get('/componentes/{id}/horas', [ComponenteController::class, 'horas_vuelo'])->middleware('auth');
+Route::resource('/componentes', ComponenteController::class)->middleware('auth');
+
+
+/*
+----------------------------------------
+* RUTAS: REGISTROS DE VUELO DIARIO
+----------------------------------------
+*/
+Route::get('/rvds/{id}/nuevo_digitalizado', [RegistroVueloDiarioController::class, 'digitalizado'])->middleware('auth');
+Route::get('/rvds/{id}/rvus/nuevo', [RegistroVueloController::class, 'create'])->middleware('auth');
+Route::get('/rvds/{id}/rvus', [RegistroVueloController::class, 'index'])->middleware('auth');
+Route::resource('/rvds', RegistroVueloDiarioController::class)->middleware('auth');
+
+Route::post('/rvds/{id}/store_digitalizado', [RegistroVueloDiarioController::class, 'store_digitalizado'])->middleware('auth');
+Route::resource('/rvus', RegistroVueloController::class)->middleware('auth');
+
 /*
 ----------------------------------------
 * RUTAS: AERONAVES
 ----------------------------------------
 */
+// Route::resource('/aeronaves/{id}/mantenimiento', [RegistroVueloDiarioController::class, 'registro_vuelo_diario'])->middleware('auth');
+Route::get('/aeronaves/{id}/componentes/{id2}/trazabilidad', [ComponenteController::class, 'trazabilidad'])->middleware('auth');
+Route::get('/aeronaves/{id}/rvds', [RegistroVueloDiarioController::class, 'index'])->middleware('auth');
+Route::get('/aeronaves/{id}/componentes/nuevo', [ComponenteController::class, 'create'])->middleware('auth');
+Route::get('/aeronaves/{id}/componentes', [ComponenteController::class, 'index'])->middleware('auth');
 Route::resource('/aeronaves', AeronaveController::class)->middleware('auth');
+
 /*
 ----------------------------------------
 * RUTAS: ADMINISTRATIVO
@@ -80,7 +132,6 @@ Route::resource('/cargos', CargoController::class)->middleware('auth');
 * RUTAS: INSPECCIONES Y TARJETAS
 ----------------------------------------
 */
-Route::resource('/inspecciones', InspeccionController::class)->middleware('auth');
 
 Route::put('/tarjetas/{id}/editar_actividad', [TarjetaController::class ,'update_actividad'])->middleware('auth');
 Route::get('/tarjetas/{id}/editar_actividad', [TarjetaController::class ,'editar_actividad'])->middleware('auth');
@@ -111,7 +162,7 @@ Route::resource('/seguimientos', SeguimientoController::class)->middleware('auth
 * RUTAS: REPORTES
 ----------------------------------------
 */
-Route::resource('/reportes', ReporteController::class)->middleware('auth');
+// Route::resource('/reportes', ReporteController::class)->middleware('auth');
 Route::get('/monitoreo/orden/{id}', [MonitoreoController::class ,'tablero_orden'])->middleware('auth');
 Route::resource('/monitoreo', MonitoreoController::class)->middleware('auth');
 
