@@ -32,6 +32,7 @@
                             <table class="table table-bordered tabla-datos-clientes">
                                 <thead>
                                 <tr>
+                                    <th>FOTO</th>
                                     <th>USUARIO</th>
                                     <th>PASSWORD</th>
                                     {{-- <th>NOMBRE COMPLETO</th> --}}
@@ -45,6 +46,13 @@
                                 @foreach($usuarios as $item)
                                 @if($item->rol->rol_codigo != 1)
                                 <tr>
+                                    <td>
+                                        @if($item->usu_foto == "default.jpg")
+                                        <img style="width:100px !important;" class="img-thumbnail" src="{{asset('img/default.jpg')}}">
+                                        @else
+                                        <img style="width:100px !important;" class="img-thumbnail" src="{{asset('storage/'.$item->usu_foto)}}">
+                                        @endif
+                                    </td>
                                     <td>
                                         {{$item->usu_nombre}}
                                     </td>

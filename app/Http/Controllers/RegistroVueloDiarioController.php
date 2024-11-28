@@ -20,7 +20,7 @@ class RegistroVueloDiarioController extends Controller
     {
         $id = Crypt::decryptString($id);
         $aeronave = Aeronave::where('ae_id', $id)->first();
-        $rvds = RegistroVueloDiario::all();      
+        $rvds = RegistroVueloDiario::where('ae_id', $id)->get();      
         return view('registro_vuelos.lista_registro_vuelos_diarios', [ 
                                                         'titulo'=>'REGISTROS DE VUELO DE LA AERONAVE',
                                                         'aeronave' => $aeronave,

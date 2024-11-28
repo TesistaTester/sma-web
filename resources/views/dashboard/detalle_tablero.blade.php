@@ -13,6 +13,29 @@
                 <!-- inicio card  -->
                 <div class="card card-stat">
                     <div class="card-body">
+                      {{-- <h4>GRUPO: {{session('gru_nombre')}}</h4>
+                      <h4>GRUPO: {{session('gru_id')}}</h4> --}}
+                            <div class="row">
+                              <div class="col-md-4">
+                                  <div class="box-result bg-secondary">
+                                      <h1>{{$aero_m}}</h1>
+                                      AERONAVES EN MANTTO.
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="box-result bg-warning">
+                                      <h1>{{$proximas}}</h1>
+                                      AERONAVES C/ INSPECC. PROXIMA
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="box-result bg-danger">
+                                      <h1>{{$vencidas}}</h1>
+                                      AERONAVES C/ INSPECC. VENCIDAS
+                                  </div>
+                                </div>
+                            </div>
+                            <hr>
                             <div class="row">
                               <div class="col-md-3">
                                 <div class="box-result">
@@ -114,7 +137,6 @@
                           </div> --}}
 
                           </div>
-                            <hr>
                             <hr>
                             <div class="row">
                             </div>

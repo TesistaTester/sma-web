@@ -210,23 +210,23 @@
 													<tr>
 														<td colspan="2" rowspan="6" id="txt_desc_trabajo"></td>
 														<td><b>3. MSN:</b></td>
-														<td>{{config('wop.serial_number')}}</td>
+														<td>{{$aeronave->ae_serial_number}}</td>
 													</tr>
 													<tr>
 														<td style="width:25%"><b>4. MATRICULA:</b></td>
-														<td>{{config('wop.matricula')}}</td>
+														<td>{{$aeronave->ae_matricula}}</td>
 													</tr>
 													<tr>
 														<td><b>5. HORAS NAVE:</b></td>
 														<td>
-															<span id="txt_ae_horas">{{intdiv(config('wop.total_horas'), 60)}}</span>
+															<span id="txt_ae_horas">{{intdiv($horas, 60)}}</span>
 															:
-															<span id="txt_ae_minutos">{{(int)(config('wop.total_horas'))%60}}</span>
+															<span id="txt_ae_minutos">{{(int)($horas)%60}}</span>
 														</td>
 													</tr>
 													<tr>
 														<td><b>6. CICLOS NAVE:</b></td>
-														<td id="txt_ae_landings">{{config('wop.total_landings')}}</td>
+														<td id="txt_ae_landings">{{$landings}}</td>
 													</tr>
 													<tr>
 														<td><b>APU S/N:</b></td>

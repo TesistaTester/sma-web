@@ -22,4 +22,8 @@ class ConfiguracionMantenimiento extends Model
         return $this->belongsTo(Componente::class, 'com_id');
     }
 
+    public function inspecciones(){
+        return $this->hasMany(Inspeccion::class, 'cma_id');
+    }
+
 }

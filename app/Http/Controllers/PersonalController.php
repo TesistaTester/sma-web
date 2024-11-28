@@ -14,6 +14,7 @@ use App\Models\Grado;
 use App\Models\Grupo;
 use App\Models\Persona;
 use App\Models\UnidadFuncionario;
+use Illuminate\Support\Facades\DB;
 
 class PersonalController extends Controller
 {
@@ -28,7 +29,29 @@ class PersonalController extends Controller
         //verificar si esta logueado el usuario
         // if(!Auth::check()){return redirect('/');}
 
-        $personal = UnidadFuncionario::all();      
+        // $personal = UnidadFuncionario::all();      
+
+        // $personal = UnidadFuncionario::with([
+        //     'cargo.unidad.grupo'
+        // ])->get();
+
+        if(session('gru_id') == -1){
+            $personal = UnidadFuncionario::all();      
+        }else{
+            $personal = UnidadFuncionario::with([
+                'cargo.unidad.grupo'
+            ])->whereHas('cargo.unidad.grupo', function ($query) {
+                $query->where('gru_id', session('gru_id'));
+            })->get();    
+        }
+
+
+        // $personal = DB::table('unidad_funcionario')
+        // ->join('cargo', 'unidad_funcionario.car_id', '=', 'cargo.car_id')
+        // ->join('unidad_organizacional', 'unidad_organizacional.uor_id', '=', 'cargo.uor_id')
+        // ->join('grupo_aereo', 'grupo_aereo.gru_id', '=', 'unidad_organizacional.gru_id')
+        // ->select('unidad_funcionario.*', 'grupo_aereo.*')
+        // ->get();
 
         return view('personal.lista_personal', ['titulo'=>'Gestión del personal técnico',
                                                           'personal' => $personal,
@@ -49,7 +72,15 @@ class PersonalController extends Controller
         $titulo = 'NUEVO PERSONAL';
         $grados = Grado::all();
         $especialidades = Especialidad::all();
-        $cargos = Cargo::all();
+        if(session('gru_id') == -1){
+            $cargos = Cargo::all();      
+        }else{
+            $cargos = Cargo::with(['unidad.grupo'])
+                ->whereHas('unidad.grupo', function ($query) {
+                    $query->where('gru_id', session('gru_id'));
+                })
+                ->get();
+        }
 
         return view('personal.form_nuevo_personal', ['titulo'=>$titulo, 
                                                     'modulo_activo' => $this->modulo,
@@ -123,7 +154,18 @@ class PersonalController extends Controller
         $titulo = 'EDITAR PERSONAL';
         $grados = Grado::all();
         $especialidades = Especialidad::all();
-        $cargos = Cargo::all();
+
+        if(session('gru_id') == -1){
+            $cargos = Cargo::all();      
+        }else{
+            $cargos = Cargo::with(['unidad.grupo'])
+                ->whereHas('unidad.grupo', function ($query) {
+                    $query->where('gru_id', session('gru_id'));
+                })
+                ->get();
+        }
+        
+
         $personal = UnidadFuncionario::where('unf_id', $id)->first();
 
         return view('personal.form_editar_personal', ['titulo'=>$titulo, 

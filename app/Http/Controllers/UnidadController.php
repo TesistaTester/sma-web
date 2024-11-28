@@ -20,7 +20,14 @@ class UnidadController extends Controller
         //verificar si esta logueado el usuario
         // if(!Auth::check()){return redirect('/');}
 
-        $unidades = UnidadOrganizacional::all();
+
+        if(session('gru_id') == -1){
+            $unidades = UnidadOrganizacional::all();
+        }else{
+            $unidades = UnidadOrganizacional::where('gru_id', session('gru_id'))->get();
+        }
+        
+
         return view('unidades.lista_unidades', ['titulo'=>'Gestionar de secciones',
                                                           'unidades' => $unidades,
                                                           'modulo_activo' => $this->modulo

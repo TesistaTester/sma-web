@@ -178,8 +178,8 @@
           <form id="form-eliminar-componente" action="{{url('mantenimientos')}}" data-simple-action="{{url('mantenimientos')}}" method="post">
             @method('delete')
             @csrf
-                <input type="text" name="ae_id" value="{{$aeronave->ae_id}}">
-                <input type="text" name="com_id" value="{{$componente->com_id}}">
+                <input type="hidden" name="ae_id" value="{{$aeronave->ae_id}}">
+                <input type="hidden" name="com_id" value="{{$componente->com_id}}">
                 <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Si, eliminar</button>
           </form>
         </div>

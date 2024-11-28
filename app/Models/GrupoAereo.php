@@ -26,4 +26,15 @@ class GrupoAereo extends Model
         return $this->hasMany(UnidadOrganizacional::class, 'gru_id');
     }
 
+    public function aeronaves()
+    {
+        return $this->hasManyThrough(
+            Aeronave::class,          // Modelo final (aeronaves)
+            DetalleGrupoAeronave::class, // Modelo intermedio (detalle_grupo_aeronave)
+            'gru_id',                 // Llave foránea en detalle_grupo_aeronave
+            'ae_id',                  // Llave foránea en aeronave
+            'gru_id',                 // Llave local en grupo_aereo
+            'ae_id'                   // Llave local en detalle_grupo_aeronave
+        );
+    }    
 }

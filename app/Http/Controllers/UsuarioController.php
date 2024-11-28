@@ -9,6 +9,7 @@ use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UsuarioController extends Controller
 {
@@ -75,7 +76,16 @@ class UsuarioController extends Controller
         // $usuario->usu_apellidos_persona = $request->input('usu_apellidos_persona');
         $usuario->usu_email = $request->input('usu_email');
         $usuario->rol_id = $request->input('rol_id');
-        // $usuario->gru_id = 1;
+
+        //guardar foto del usuario en storage
+        $disk = Storage::disk('public');
+        $carpeta_usuario = 'docs_usuarios/';
+        $disk->makeDirectory($carpeta_usuario);
+        $disk->put($carpeta_usuario.'/index.html', "<h2>Acceso no permitido</h2>");
+        $uri_foto = $request->file('usu_foto')->storePublicly($carpeta_usuario, 'public'); // store encadenado
+
+        $usuario->usu_foto = $uri_foto;
+
         $usuario->save();
 
         return redirect('usuarios');
@@ -134,11 +144,24 @@ class UsuarioController extends Controller
         $id = Crypt::decryptString($id);//Desencriptando parametro ID
         $usuario = Usuario::where('usu_id', $id)->first();
         $usuario->usu_nombre = $request->input('usu_nombre');
-        $usuario->usu_nombres_persona = $request->input('usu_nombres_persona');
-        $usuario->usu_apellidos_persona = $request->input('usu_apellidos_persona');
+        if($request->input('fun_id') == 'x'){
+            $usuario->fun_id = null;
+        }else{
+            $usuario->fun_id = $request->input('fun_id');
+        }
         $usuario->usu_email = $request->input('usu_email');
-        $usuario->usu_rol = $request->input('usu_rol');
-        $usuario->gru_id = 1;
+        $usuario->rol_id = $request->input('rol_id');
+
+        //guardar foto del usuario en storage
+        $disk = Storage::disk('public');
+        $carpeta_usuario = 'docs_usuarios/';
+        $disk->makeDirectory($carpeta_usuario);
+        $disk->put($carpeta_usuario.'/index.html', "<h2>Acceso no permitido</h2>");
+        $uri_foto = $request->file('usu_foto')->storePublicly($carpeta_usuario, 'public'); // store encadenado
+
+        $usuario->usu_foto = $uri_foto;
+        
+
         $usuario->save();
 
         return redirect('usuarios');

@@ -5,7 +5,7 @@
 
 <div class="col-md-10 content-pane">
 		<h3 class="title-header" style="text-transform: uppercase;">
-			<i class="fa fa-plus"></i>
+			<i class="fa fa-edit"></i>
 			{{$titulo}}
 			<a href="{{url('usuarios')}}" title="Volver a lista de usuarios" data-placement="bottom" class="btn btn-sm btn-secondary float-right" style="margin-left:10px;"><i class="fa fa-angle-double-left"></i> ATRÁS</a>
 		</h3>
@@ -17,7 +17,7 @@
 					<div class="row no-gutters">
 						<div class="col-md-12">
 							<div class="card-body">
-								<form id="form-nuevo-usuario" action="{{url('usuarios/'.Crypt::encryptString($usuario->usu_id))}}" method="POST">
+								<form id="form-nuevo-usuario" action="{{url('usuarios/'.Crypt::encryptString($usuario->usu_id))}}" method="POST" enctype="multipart/form-data">
 									@method('PUT')
 									@csrf
 								  <section id="seccion-datos-cuenta-usuario">
@@ -123,6 +123,33 @@
 													</div>
 												</div>
 											</div>
+
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="label-blue label-block" for="">
+															Fotografia usuario:
+															<span class="text-danger">*</span>
+															<i class="fa fa-question-circle float-right" title="Establecer la fotografia del usuario"></i>
+															</label>
+															<input required type="file" accept="image/*" value="{{old('usu_foto')}}" class="form-control @error('usu_foto') is-invalid @enderror" name="usu_foto" id="usu_foto">
+															@error('usu_foto')
+															<div class="invalid-feedback">
+																{{$message}}
+															</div>											
+															@enderror	
+													</div>
+												</div>
+												<div class="col-md-6">
+													@if($usuario->usu_foto == "default.jpg")
+													<img style="width:100px !important;" class="img-thumbnail" src="{{asset('img/default.jpg')}}">
+													@else
+													<img style="width:200px !important;" class="img-thumbnail" src="{{asset('storage/'.$usuario->usu_foto)}}">
+													@endif
+												</div>
+											</div>
+
+											
 											<div class="row">
 												<div class="col-md-6">
 													<button type="submit" class="btn btn-info">

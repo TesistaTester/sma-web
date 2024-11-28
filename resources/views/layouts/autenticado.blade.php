@@ -32,12 +32,39 @@
         {{-- MENU CONTEXTUAL --}}
         <div class="col-md-2 nav-contextual-container">
             <div class="nav-contextual">
-                    <img style="width:100%;" src="{{ asset('img/logo_pp.png')}}" alt="..." class="">
-                    <br><br>
+                <div class="text-center" style="padding: 3px">
+                    <img style="width:80%;" src="{{ asset('img/logo_pp.png')}}" alt="..." class="">
+                </div>
                     {{-- <h5 class="text-center text-white" style="text-transform: uppercase; border-bottom:1px solid #555;">
                         <small>&laquo; MI CUENTA &raquo;</small>
                     </h5> --}}
+                    <div class="alert alert-info text-center text-info">
+                        <small>
+                            @if (Auth::user()->rol->rol_codigo == 1)
+                            SMA ADMIN.
+                        @endif
+                        @if (Auth::user()->rol->rol_codigo == 2)
+                            ALTO MANDO
+                        @endif
+                        @if (Auth::user()->rol->rol_codigo == 3)
+                            {{session('gru_nombre')}}
+                        @endif
+                        @if (Auth::user()->rol->rol_codigo == 4)
+                            DEPTO IV
+                        @endif
+                        </small>
+                    </div>
+
                     <div class="text-white text-center box-cuenta">
+
+                        <div class="text-center" style="padding:5px;">
+                            @if(Auth::user()->usu_foto == "default.jpg")
+                            <img style="width:100px !important;" class="img-thumbnail" src="{{asset('img/default.jpg')}}">
+                            @else
+                            <img style="width:100px !important;" class="img-thumbnail" src="{{asset('storage/'.Auth::user()->usu_foto)}}">
+                            @endif    
+                        </div>
+                            
                             @if (Auth::user()->funcionario == null)
                             <small>{{Auth::user()->usu_nombre}}</small>
                             @else
@@ -45,7 +72,7 @@
                             @endif
                             <br>
                             <small class="text-uppercase text-info" style="font-size:0.6em;">
-                                Rol: {{Auth::user()->rol->rol_nombre}}<br>
+                                {{Auth::user()->rol->rol_nombre}}<br>
                                 <a class="btn btn-sm btn-light"  data-toggle="modal" data-target="#modal-cuenta" href="#">
                                     <i class="fa fa-cog"></i> Mi cuenta
                                 </a>
@@ -56,44 +83,47 @@
                         <small>&laquo; MENÚ &raquo;</small>
                     </h5>
                     <nav class="nav nav-pills" aria-orientation="vertical">
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3 || Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'dashboard'): active @endif" href="{{url('dashboard')}}"><i class="fa fa-home"></i> INICIO</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'aeronaves'): active @endif" href="{{url('aeronaves')}}"><i class="fa fa-plane"></i> AERONAVES</a>
                         @endif
                         {{-- @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                         <a class="nav-item nav-link @if($modulo_activo == 'horas'): active @endif" href="{{url('horas')}}"><i class="fa fa-clock-o"></i> HORAS DE VUELO</a>
                         @endif --}}
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'ordenes'): active @endif" href="{{url('ordenes')}}"><i class="fa fa-wrench"></i> ORDENES</a>
                         @endif
                         {{-- @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                         <a class="nav-item nav-link @if($modulo_activo == 'inspecciones'): active @endif" href="{{url('inspecciones')}}"><i class="fa fa-check"></i> INSPECCIONES</a>
                         @endif --}}
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'tarjetas'): active @endif" href="{{url('tarjetas')}}"><i class="fa fa-tags"></i> TARJETAS</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1)
+                        @if (Auth::user()->rol->rol_codigo == 1|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'grupos'): active @endif" href="{{url('grupos')}}"><i class="fa fa-bank"></i> GRUPOS AEREOS</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'unidades'): active @endif" href="{{url('unidades')}}"><i class="fa fa-th"></i> SECCIONES</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'cargos'): active @endif" href="{{url('cargos')}}"><i class="fa fa-suitcase"></i> CARGOS</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'personal'): active @endif" href="{{url('personal')}}"><i class="fa fa-id-card"></i> PERSONAL</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
+                        @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'seguimientos'): active @endif" href="{{url('seguimientos')}}"><i class="fa fa-line-chart"></i> SEGUIMIENTO</a>
                         @endif
                         @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 2 || Auth::user()->rol->rol_codigo == 3 || Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'monitoreo'): active @endif" href="{{url('monitoreo')}}"><i class="fa fa-eye"></i> MONITOREO</a>
                         @endif
-                        @if (Auth::user()->rol->rol_codigo == 1)
+                        @if (Auth::user()->rol->rol_codigo == 1|| Auth::user()->rol->rol_codigo == 4)
                         <a class="nav-item nav-link @if($modulo_activo == 'usuarios'): active @endif" href="{{url('usuarios')}}"><i class="fa fa-users"></i> USUARIOS</a>
+                        @endif
+                        @if (Auth::user()->rol->rol_codigo == 1)
+                        <a class="nav-item nav-link @if($modulo_activo == 'auditoria'): active @endif" href="{{url('auditoria')}}"><i class="fa fa-clock-o"></i> AUDITORIA</a>
                         @endif
 
                     </nav>
@@ -129,6 +159,15 @@
         </div>
         <div class="modal-body">
             <div class="box-data-xtra">
+                <div class="row">
+                    <div class="col-md-10 offset-md-1 text-center">
+                        @if(Auth::user()->usu_foto == "default.jpg")
+                        <img style="width:200px !important;" class="img-thumbnail" src="{{asset('img/default.jpg')}}">
+                        @else
+                        <img style="width:200px !important;" class="img-thumbnail" src="{{asset('storage/'.Auth::user()->usu_foto)}}">
+                        @endif    
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6 text-info text-right">
                         USUARIO:

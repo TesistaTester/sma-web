@@ -7,7 +7,9 @@
     <h3 class="title-header" style="text-transform: uppercase;">
         <i class="fa fa-wrench"></i>
         {{$titulo}}
-        <a href="{{url('ordenes/nuevo')}}" class="btn btn-sm btn-info float-right" style="margin-left:10px;"><i class="fa fa-plus"></i> NUEVA ORDEN DE TRABAJO</a>
+        {{-- @if (Auth::user()->rol->rol_codigo == 3)
+                <a href="{{url('ordenes/nuevo')}}" class="btn btn-sm btn-info float-right" style="margin-left:10px;"><i class="fa fa-plus"></i> NUEVA ORDEN DE TRABAJO</a>
+        @endif         --}}
     </h3>
     <div class="row">
         <div class="col-12">
@@ -98,6 +100,9 @@
                                         @else    
                                         <a class="dropdown-item btn-imprimir-item" data-id="{{Crypt::encryptString($item->ort_id)}}" data-descripcion="{{$item->ort_cite}}" data-toggle="modal" data-target="#modal-imprimir-orden" data-tarjeta-link="{{Storage::disk(config('wop.disco'))->temporaryUrl($item->tarjeta->tar_digitalizado,  now()->addMinutes(10))}}" href="#"><i class="fa fa-print"></i> Imprimir orden</a>
                                         @endif    
+
+                                        @if (Auth::user()->rol->rol_codigo == 3)
+
                                         @if($item->ort_avance < 100)
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item btn-eliminar-item" data-id="{{$item->ort_id}}" data-descripcion="{{$item->ort_cite}}" data-toggle="modal" data-target="#modal-eliminar-orden" href="#"><i class="fa fa-trash"></i> Anular orden</a>
@@ -106,6 +111,8 @@
                                             {{-- @if($item->ort_documento_ruta == "") --}}
                                             <a class="dropdown-item btn-subir-orden" data-id="{{$item->ort_id}}" data-descripcion="{{$item->ort_cite}}" data-toggle="modal" data-target="#modal-subir-orden" href="#"><i class="fa fa-upload"></i> Subir digitalizado</a>
                                             {{-- @endif --}}
+                                        @endif
+
                                         @endif
                                       </div>
                                     </div>

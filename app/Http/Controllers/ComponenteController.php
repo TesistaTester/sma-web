@@ -22,7 +22,7 @@ class ComponenteController extends Controller
     {
         $id = Crypt::decryptString($id);
         $aeronave = Aeronave::where('ae_id', $id)->first();
-        $componentes = Componente::all();
+        $componentes = $aeronave->componentes;
         return view('componentes.lista_componentes', [
                                                         'titulo'=>'INVENTARIO DE COMPONENTES',
                                                         'aeronave' => $aeronave,

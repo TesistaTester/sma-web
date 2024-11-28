@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aeronave;
 use App\Models\Inspeccion;
 use App\Models\OrdenTrabajo;
 use App\Models\PersonalOrdenTrabajo;
@@ -79,6 +80,68 @@ class OrdenController extends Controller
                                                    'inspectores' => $inspectores,
                                                    'tecnicos' => $tecnicos,
                                                    'tarjetas' => $tarjetas,
+                                                   'modulo_activo' => $this->modulo
+                                                 ]);
+    }
+
+    public function create_orden($id)
+    {
+        $id = Crypt::decryptString($id);
+
+        $aeronave = Aeronave::where('ae_id', $id)->first();
+        $titulo = 'NUEVA ORDEN DE TRABAJO';
+        $inspecciones = Inspeccion::all();
+        $tarjetas = Tarjeta::all();
+        $personal = UnidadFuncionario::all();
+
+        $horas = 0;
+        $landings = 0;
+        foreach($aeronave->horas_diario as $item){
+            foreach($item->registros_vuelo as $ritem){
+                // echo $ritem;
+                // echo $ritem->rvu_horas_normales;
+                $horas = $horas + $ritem->rvu_normales;
+                $landings = $landings + $ritem->rvu_normales;
+            }
+        }
+        
+        $supervisores = DB::table('persona')
+                          ->join('funcionario', 'persona.per_id', '=', 'funcionario.per_id')
+                          ->join('unidad_funcionario', 'funcionario.fun_id', '=', 'unidad_funcionario.fun_id')
+                          ->join('grado', 'grado.gra_id', '=', 'funcionario.gra_id')
+                          ->select('persona.*', 'funcionario.*', 'unidad_funcionario.*', 'grado.*')
+                          ->where('funcionario.fun_nivel', 7)
+                          ->get();
+        $inspectores = DB::table('persona')
+                          ->join('funcionario', 'persona.per_id', '=', 'funcionario.per_id')
+                          ->join('unidad_funcionario', 'funcionario.fun_id', '=', 'unidad_funcionario.fun_id')
+                          ->join('grado', 'grado.gra_id', '=', 'funcionario.gra_id')
+                          ->select('persona.*', 'funcionario.*', 'unidad_funcionario.*', 'grado.*')
+                          ->where('funcionario.fun_nivel', 5)
+                          ->get();
+        $tecnicos = DB::table('persona')
+                          ->join('funcionario', 'persona.per_id', '=', 'funcionario.per_id')
+                          ->join('unidad_funcionario', 'funcionario.fun_id', '=', 'unidad_funcionario.fun_id')
+                          ->join('grado', 'grado.gra_id', '=', 'funcionario.gra_id')
+                          ->select('persona.*', 'funcionario.*', 'unidad_funcionario.*', 'grado.*')
+                          ->where('funcionario.fun_nivel', 3)
+                          ->orWhere('funcionario.fun_nivel', 5)
+                          ->orWhere('funcionario.fun_nivel', 7)
+                          ->get();
+
+        $tarjetas = Tarjeta::all();
+
+        return view('ordenes.form_nueva_orden', ['titulo'=>$titulo,
+                                                   'aeronave' => $aeronave,
+                                                   'inspecciones' => $inspecciones,
+                                                   'tarjetas' => $tarjetas,
+                                                   'personal' => $personal,
+                                                   'supervisores' => $supervisores,
+                                                   'inspectores' => $inspectores,
+                                                   'tecnicos' => $tecnicos,
+                                                   'tarjetas' => $tarjetas,
+                                                   'horas' => $horas,
+                                                   'landings' => $landings,
                                                    'modulo_activo' => $this->modulo
                                                  ]);
     }

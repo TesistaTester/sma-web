@@ -72,12 +72,15 @@
 		
 								</div>
 	
-
+								@php
+									$cant_inspecciones = $mantenimiento->inspecciones->count() + 1;
+									$horas_estimado = $mantenimiento->cma_horas_frecuencia * $cant_inspecciones;
+								@endphp
 								<form id="form-nuevo-inspeccion" action="{{url('inspecciones')}}" method="POST">
 								  @csrf
 								  <section id="seccion-datos-generales">
 									<div class="row">
-										<div class="col-md-6 offset-md-3">
+										<div class="col-md-8 offset-md-2">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group">
@@ -101,12 +104,47 @@
 															<span class="text-danger">*</span>
 															<i class="fa fa-question-circle float-right" title="Establecer la descripcion de la inspeccion"></i>
 															</label>
-														<textarea required class="form-control @error('uor_nombre') is-invalid @enderror" name="ins_descripcion" id="ins_descripcion" cols="30" rows="10">{{old('uor_nombre')}}</textarea>
+														<textarea required class="form-control @error('uor_nombre') is-invalid @enderror" name="ins_descripcion" id="ins_descripcion" cols="30" rows="6">{{old('uor_nombre')}}</textarea>
 														@error('ins_descripcion')
 														<div class="invalid-feedback">
 															{{$message}}
 														</div>											
 														@enderror
+													</div>
+												</div>
+												<div class="col-md-12">
+													<div class="row">
+														<div class="col-md-6">
+															<div class="form-group">
+																	<label class="label-blue label-block" for="">
+																	Hora de inspeccion (estimado):
+																	<span class="text-danger">*</span>
+																	<i class="fa fa-question-circle float-right" title="Establecer el nombre de la inspeccion"></i>
+																	</label>
+																<input required type="number" min="0" value="{{old('ins_hora_componente', $horas_estimado)}}" class="form-control @error('ins_hora_componente') is-invalid @enderror" name="ins_hora_componente" id="ins_hora_componente" placeholder="Hora de inspeccion">
+																@error('ins_hora_componente')
+																<div class="invalid-feedback">
+																	{{$message}}
+																</div>											
+																@enderror
+															</div>
+														</div>
+														<div class="col-md-6">	
+															<div class="form-group">
+																	<label class="label-blue label-block" for="">
+																	Hora de inspeccion (limite max):
+																	<span class="text-danger">*</span>
+																	<i class="fa fa-question-circle float-right" title="Establecer el nombre de la inspeccion"></i>
+																	</label>
+																<input required type="number" min="0" value="{{old('ins_hora_componente_max', $horas_estimado +$mantenimiento->cma_horas_cota_max)}}" class="form-control @error('ins_hora_componente_max') is-invalid @enderror" name="ins_hora_componente_max" id="ins_hora_componente_max" placeholder="Hora de inspeccion">
+																@error('ins_hora_componente_max')
+																<div class="invalid-feedback">
+																	{{$message}}
+																</div>											
+																@enderror
+															</div>
+															
+														</div>
 													</div>
 												</div>
 
@@ -123,6 +161,7 @@
 													</button>
 												</div>
 											</div>
+											<br>
 
 										</div>
 									</div>

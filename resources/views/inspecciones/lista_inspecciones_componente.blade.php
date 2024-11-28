@@ -60,8 +60,30 @@
                                         @endif
                                     </h4>
                                     <h4>
-                                        <span class="text-info">TOLERANCIA MAX.:</span> {{$mantenimiento->cma_horas_cota_max}} [HRS]
+                                        <span class="text-info">FRECUENCIA.:</span> {{$mantenimiento->cma_horas_frecuencia}} [HRS]  (<small>+{{$mantenimiento->cma_horas_cota_max}} max.</small>)
                                     </h4>        
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <div class="media">
+                                <img src="{{asset('img/alert-info.png')}}" class="align-self-center mr-3" alt="...">
+                                <div class="media-body">
+                                    <h5 class="mt-0">Nota.-</h5>
+                                    <p>
+                                        <ul>
+                                            <li>
+                                                Las inspecciones proximas a cumplirse se marcan en color <span class>NARANJA</span>. Con 5 horas de antelación.
+                                            </li>
+                                            <li>
+                                                Las inspecciones vencidas se marcan en color ROJO.
+                                            </li>
+                                            <li>
+                                                Las inspecciones con orden abierta o cumplidas se marcan en color VERDE.
+                                            </li>
+                                        </ul>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -79,35 +101,45 @@
                             </div>
                         </div>
                         @else
+                        H ACUMULADOS: {{ round($componente->com_hv_ac_normales/60,0) }}
                         <div class="table-responsive">
                             <table class="table table-bordered tabla-datos">
                                 <thead>
                                 <tr>
                                     <th>NOMBRE DE LA INSPECCION</th>
                                     <th>DESCRIPCION</th>
-                                    {{-- <th>TARJETAS</th> --}}
+                                    <th>HORA PROGRAMADA</th>
                                     <th>OPCION</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($inspecciones as $item)
-                                <tr>
+                                @if($item->ordenes->count() > 0)
+                                    <tr class="bg-success">
+                                @else
+                                    @if((round($componente->com_hv_ac_normales/60,0) > ($item->ins_hora_componente - 5)) &&(round($componente->com_hv_ac_normales/60,0) < ($item->ins_hora_componente)))
+                                    <tr class="bg-warning">
+                                    @endif
+                                    @if(round($componente->com_hv_ac_normales/60,0) > ($item->ins_hora_componente))
+                                    <tr class="bg-danger">
+                                    @endif
+                                @endif
                                     <td class="text-center">
                                         {{$item->ins_nombre}}
                                     </td>
                                     <td class="text-center">
                                         {{$item->ins_descripcion}}
                                     </td>
-                                    {{-- <td class="text-center">
-                                        {{$item->tarjetas->count()}}
-                                    </td> --}}
+                                    <td class="text-center">
+                                        {{$item->ins_hora_componente}}
+                                    </td>
                                     <td>
                                         <div class="dropdown">
                                           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             OPCION
                                           </button>
                                           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="{{url('inspecciones/'.Crypt::encryptString($item->ins_id).'/editar')}}"><i class="fa fa-edit"></i> Editar</a>
+                                            {{-- <a class="dropdown-item" href="{{url('inspecciones/'.Crypt::encryptString($item->ins_id).'/editar')}}"><i class="fa fa-edit"></i> Editar</a> --}}
                                             @if ($item->ordenes->count() > 0)
                                             <a class="dropdown-item disabled" href="#" title="La inspeccion tiene registros asociados. NO es posible eliminarlo."><i class="fa fa-trash"></i> Eliminar</a>
                                             @else
@@ -186,7 +218,7 @@ $(function(){
     * CONFIGURACION DATA TABLES
     -------------------------------------------------------------
     */
-    $('.tabla-datos').DataTable({"language":{url: '{{asset('js/datatables-lang-es.json')}}'}, "order": [[ 1, "desc" ]]});
+    $('.tabla-datos').DataTable({"language":{url: '{{asset('js/datatables-lang-es.json')}}'}, "order": [[ 2, "asc" ]]});
 
     /*
     --------------------------------------------------------------

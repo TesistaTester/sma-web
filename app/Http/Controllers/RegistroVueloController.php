@@ -85,7 +85,7 @@ class RegistroVueloController extends Controller
         $rvu->rvu_normales = $normales_minutos;
         $rvu->rvu_utilitarias = $utilitarias_minutos;
         $rvu->rvu_acrobaticas = $acrobaticas_minutos;
-        $rvu->rvu_landings = $request->input("rvu_acrobaticas_horas");
+        $rvu->rvu_landings = $request->input("rvu_landings");
         $rvu->rvu_observacion = $request->input("rvu_observacion");
         $rvu->save();
 

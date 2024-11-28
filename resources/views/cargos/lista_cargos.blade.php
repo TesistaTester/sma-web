@@ -41,6 +41,8 @@
                                 <tr>
                                     <td>
                                         {{$item->unidad->uor_nombre}}                                    
+                                        <br>
+                                        <sup class="text-info">{{$item->unidad->grupo->gru_nombre}}</sup>
                                     </td>
                                     <td class="text-center">
                                         {{$item->car_nombre}}

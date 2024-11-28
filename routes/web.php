@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AeronaveController;
+use App\Http\Controllers\AuditoriaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\PersonalController;
@@ -61,6 +62,13 @@ Route::resource('/dashboard', DashboardController::class)->middleware('auth');
 
 /*
 ----------------------------------------
+* RUTAS: DASHBOARD
+----------------------------------------
+*/
+Route::resource('/auditoria', AuditoriaController::class)->middleware('auth');
+
+/*
+----------------------------------------
 * RUTAS: PERSONAL
 ----------------------------------------
 */
@@ -112,10 +120,12 @@ Route::resource('/rvus', RegistroVueloController::class)->middleware('auth');
 * RUTAS: AERONAVES
 ----------------------------------------
 */
-// Route::resource('/aeronaves/{id}/mantenimiento', [RegistroVueloDiarioController::class, 'registro_vuelo_diario'])->middleware('auth');
+Route::get('/aeronaves/{id}/mantenimiento', [InspeccionController::class, 'inspecciones_aeronave'])->middleware('auth');
 Route::get('/aeronaves/{id}/componentes/{id2}/trazabilidad', [ComponenteController::class, 'trazabilidad'])->middleware('auth');
 Route::get('/aeronaves/{id}/rvds', [RegistroVueloDiarioController::class, 'index'])->middleware('auth');
 Route::get('/aeronaves/{id}/componentes/nuevo', [ComponenteController::class, 'create'])->middleware('auth');
+Route::put('/aeronaves/{id}/update_estado', [AeronaveController::class, 'update_estado'])->middleware('auth');
+Route::get('/aeronaves/{id}/editar_estado', [AeronaveController::class, 'edit_estado'])->middleware('auth');
 Route::get('/aeronaves/{id}/componentes', [ComponenteController::class, 'index'])->middleware('auth');
 Route::resource('/aeronaves', AeronaveController::class)->middleware('auth');
 
@@ -149,6 +159,7 @@ Route::resource('/tarjetas', TarjetaController::class)->middleware('auth');
 Route::get('/ordenes/print1/{id}', [OrdenController::class ,'imprimir_hoja1'])->middleware('auth');
 Route::get('/ordenes/print3/{id}', [OrdenController::class ,'imprimir_hoja3'])->middleware('auth');
 Route::post('/ordenes/subir_digital/{id}', [OrdenController::class ,'subir_digital'])->middleware('auth');
+Route::get('/ordenes/{id}/apertura', [OrdenController::class, 'create_orden'])->middleware('auth');
 Route::resource('/ordenes', OrdenController::class)->middleware('auth');
 Route::post('/seguimientos/back_realizar', [SeguimientoController::class ,'back_realizar'])->middleware('auth');
 Route::post('/seguimientos/back_desarrollo', [SeguimientoController::class ,'back_desarrollo'])->middleware('auth');

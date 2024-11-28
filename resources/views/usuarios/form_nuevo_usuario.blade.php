@@ -17,7 +17,7 @@
 					<div class="row no-gutters">
 						<div class="col-md-12">
 							<div class="card-body">
-								<form id="form-nuevo-usuario" action="{{url('usuarios')}}" method="POST">
+								<form id="form-nuevo-usuario" action="{{url('usuarios')}}" method="POST" enctype="multipart/form-data">
 								  @csrf
 								  <section id="seccion-datos-cuenta-usuario">
 									<h4 class="card-title"><strong><span class="text-info">
@@ -74,7 +74,7 @@
 															<select required class="form-control @error('fun_id') is-invalid @enderror" name="fun_id" id="fun_id">
 																<option value="">Seleccione una opción</option>
 																@foreach ($funcionarios as $item)
-																<option value="{{$item->fun_id}}" {{ old('fun_id') == $item->fun_id ? 'selected' : '' }}>{{$item->grado->gra_abreviacion}} {{$item->persona->per_nombres}} {{$item->persona->per_primer_apellido}} {{$item->persona->per_segundo_apellido}}</option>
+																<option value="{{$item->fun_id}}" {{ old('fun_id') == $item->fun_id ? 'selected' : '' }}>{{$item->grado->gra_abreviacion}} {{$item->persona->per_nombres}} {{$item->persona->per_primer_apellido}} {{$item->persona->per_segundo_apellido}} ({{$item->unidades[0]->cargo->unidad->grupo->gru_nombre}})</option>
 																@endforeach
 																<option value="9999999">SIN RELACION A PERSONAL</option>
 															</select>
@@ -125,6 +125,27 @@
 													</div>
 												</div>
 											</div>
+
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="label-blue label-block" for="">
+														Fotografia usuario:
+														<span class="text-danger">*</span>
+														<i class="fa fa-question-circle float-right" title="Establecer la fotografia del usuario"></i>
+														</label>
+														<input required type="file" accept="image/*" value="{{old('usu_foto')}}" class="form-control @error('usu_foto') is-invalid @enderror" name="usu_foto" id="usu_foto">
+														@error('usu_foto')
+														<div class="invalid-feedback">
+															{{$message}}
+														</div>											
+														@enderror
+													</div>
+												</div>
+											</div>
+
+											
+
 											<div class="row">
 												<div class="col-md-6">
 													<button type="submit" class="btn btn-info">

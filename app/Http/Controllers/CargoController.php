@@ -20,9 +20,17 @@ class CargoController extends Controller
         //verificar si esta logueado el usuario
         // if(!Auth::check()){return redirect('/');}
 
-        $cargos = Cargo::all();      
 
-        // activity()->log('Listando cargos');                                         
+        if(session('gru_id') == -1){
+            $cargos = Cargo::all();      
+        }else{
+            $cargos = Cargo::with(['unidad.grupo'])
+                ->whereHas('unidad.grupo', function ($query) {
+                    $query->where('gru_id', session('gru_id'));
+                })
+                ->get();
+        }
+
 
         return view('cargos.lista_cargos', ['titulo'=>'Gestionar de cargos',
                                                           'cargos' => $cargos,

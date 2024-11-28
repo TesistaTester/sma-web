@@ -31,14 +31,15 @@
                             <table class="table table-bordered tabla-datos-clientes">
                                 <thead>
                                 <tr>
-                                    <th>FOTO</th>
-                                    <th>MATRICULA</th>
-                                    <th>TIPO</th>
-                                    <th>CATEGORIA</th>
-                                    <th>FABRICANTE</th>
-                                    <th>COMPONENTES</th>
-                                    <th>REGISTRO</th>
-                                    <th>OPCION</th>
+                                    <th class="hsmall">FOTO</th>
+                                    <th class="hsmall">GRUPO</th>
+                                    <th class="hsmall">MATRICULA</th>
+                                    <th class="hsmall">TIPO</th>
+                                    <th class="hsmall">CATEGORIA</th>
+                                    <th class="hsmall">FABRICANTE</th>
+                                    <th class="hsmall">COMPONENTES</th>
+                                    <th class="hsmall">REGISTRO</th>
+                                    <th class="hsmall">OPCION</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -50,6 +51,9 @@
                                         @else
                                         <img style="width:100px !important;" class="img-thumbnail" src="{{asset('storage/'.$item->ae_foto)}}">
                                         @endif
+                                    </td>
+                                    <td class="text-center">
+                                        {{$item->detalles[0]->grupo->gru_nombre}}
                                     </td>
                                     <td class="text-center">
                                         {{$item->ae_matricula}}
@@ -83,14 +87,17 @@
                                           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="{{url('aeronaves/'.Crypt::encryptString($item->ae_id).'/componentes')}}"><i class="fa fa-th-large"></i> Componentes</a>
                                             <a class="dropdown-item" href="{{url('aeronaves/'.Crypt::encryptString($item->ae_id).'/rvds')}}"><i class="fa fa-clock-o"></i> Horas de vuelo</a>
-                                            {{-- <a class="dropdown-item" href="{{url('aeronaves/'.Crypt::encryptString($item->ae_id).'/mantenimiento')}}"><i class="fa fa-wrench"></i> Mantenimiento</a> --}}
+                                            <a class="dropdown-item" href="{{url('aeronaves/'.Crypt::encryptString($item->ae_id).'/mantenimiento')}}"><i class="fa fa-wrench"></i> Inspecciones mantenimiento</a>
                                             <div class="dropdown-divider"></div>
+
                                             <a class="dropdown-item" href="{{url('aeronaves/'.Crypt::encryptString($item->ae_id).'/editar')}}"><i class="fa fa-edit"></i> Editar</a>
+                                            <a class="dropdown-item" href="{{url('aeronaves/'.Crypt::encryptString($item->ae_id).'/editar_estado')}}"><i class="fa fa-refresh"></i> Cambiar estado W-P-M</a>
                                             @if (count($item->horas_diario) > 0)                                             
                                             <a class="dropdown-item disabled" title="No es posible eliminar el aeronave. Tiene registros." data-usu-id="{{Crypt::encryptString($item->ae_id)}}" data-usu-nombre="{{$item->ae_nombre}}" data-toggle="modal" data-target="#modal-eliminar-aeronave" href="#"><i class="fa fa-trash"></i> Eliminar</a>                                               
                                             @else
                                             <a class="dropdown-item btn-eliminar-aeronave" data-usu-id="{{Crypt::encryptString($item->ae_id)}}" data-usu-nombre="{{$item->ae_nombre}}" data-toggle="modal" data-target="#modal-eliminar-aeronave" href="#"><i class="fa fa-trash"></i> Eliminar</a>
                                             @endif
+
                                           </div>
                                         </div>
                                     </td>

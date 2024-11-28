@@ -38,5 +38,17 @@ class Aeronave extends Model
         return $this->belongsTo(FabricanteAeronave::class, 'faa_id');
     }
 
+    public function componentes()
+    {
+        return $this->hasManyThrough(
+            Componente::class,          // Modelo final al que se accederá
+            InventarioAeronave::class,  // Modelo intermedio
+            'ae_id',                    // Llave foránea en inventario_aeronave
+            'com_id',                   // Llave foránea en componente
+            'ae_id',                    // Llave local en aeronave
+            'com_id'                    // Llave local en inventario_aeronave
+        );
+    }
+
 
 }

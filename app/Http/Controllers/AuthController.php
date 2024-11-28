@@ -26,6 +26,17 @@ class AuthController extends Controller
         if(Auth::attempt(['usu_nombre' => $usr, 'password' => $pwd])){
             $request->session()->regenerate();
             $usuario = Auth::user();
+
+            if($usuario->funcionario){
+                $grupo_aereo = $usuario->funcionario->unidades[0]->cargo->unidad->grupo->gru_nombre;
+                $grupo_id = $usuario->funcionario->unidades[0]->cargo->unidad->grupo->gru_id;
+                $request->session()->put('gru_nombre', $grupo_aereo);    
+                $request->session()->put('gru_id', $grupo_id);    
+            }else{
+                $request->session()->put('gru_nombre', "");    
+                $request->session()->put('gru_id', -1);    
+            }
+
             if($usuario->rol->rol_codigo == '1'){ //ADMINISTRADOR
                 return redirect('dashboard');
             }

@@ -31,9 +31,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //verificar si esta logueado el usuario
-        // if(!Auth::check()){return redirect('/');}
-
         $usuarios = Auth::user();
         $grupos = GrupoAereo::all();
         $aeronaves = Aeronave::all();
@@ -44,6 +41,66 @@ class DashboardController extends Controller
         $ordenes = OrdenTrabajo::all();
         $tarjetas = TarjetaPlanificada::all();
         $titulo = "Panel de inicio";
+
+        //contadores
+        $aero_m = 0;
+        $aero_w = 0;
+        $aero_p = 0;
+
+        //inspecciones proximas y vencidas
+        $vencidas = 0;
+        $proximas = 0;
+
+        foreach($aeronaves as $witem){
+            if($witem->ae_estado_matricula == 'M'){
+                $aero_m = $aero_m + 1;
+            }
+            if($witem->ae_estado_matricula == 'W'){
+                $aero_w = $aero_w + 1;
+            }
+            if($witem->ae_estado_matricula == 'P'){
+                $aero_p = $aero_p + 1;
+            }
+
+            $aeronave = $witem;
+            $componentes = $aeronave->componentes;
+    
+            $inspecs = collect();
+    
+            foreach($componentes as $item){
+                foreach($item->configuraciones_mantenimiento as $kitem){
+                    foreach($kitem->inspecciones as $sitem){
+                        $inspecs->push($sitem);
+                    }
+                }
+            }
+
+            //estas son las inspecciones de la aeronave
+            $inspecciones = $inspecs->sortBy('ins_hora_componente');        
+
+            //estas son las horas de la aeronave
+            $horas = 0;
+            foreach($aeronave->horas_diario as $item){
+                foreach($item->registros_vuelo as $ritem){
+                    // echo $ritem;
+                    // echo $ritem->rvu_horas_normales;
+                    $horas = $horas + $ritem->rvu_normales;
+                }
+            }
+    
+            foreach($inspecciones as $item){
+                if((round($horas/60,0) > ($item->ins_hora_componente - 5)) &&(round($horas/60,0) < ($item->ins_hora_componente))){
+                    $proximas = $proximas + 1;
+                }
+                if(round($horas/60,0) > ($item->ins_hora_componente)){
+                    $vencidas = $vencidas + 1;
+                }
+            }
+
+            
+        }
+        
+
 
         return view('dashboard.detalle_tablero', [
                                                     'usuarios'=>$usuarios, 
@@ -56,7 +113,12 @@ class DashboardController extends Controller
                                                     'tarjetas' => $tarjetas,
                                                     'ordenes' => $ordenes,
                                                     'inspecciones' => $inspecciones,
-                                                    'modulo_activo' => $this->modulo
+                                                    'modulo_activo' => $this->modulo,
+                                                    'aero_w' => $aero_w,
+                                                    'aero_m' => $aero_m,
+                                                    'aero_p' => $aero_p,
+                                                    'vencidas' => $vencidas,
+                                                    'proximas' => $proximas,
                                                     ]);
     }
 

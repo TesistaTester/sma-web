@@ -7,13 +7,35 @@
     <h3 class="title-header" style="text-transform: uppercase;">
         <i class="fa fa-check"></i>
         {{$titulo}}
-        <a href="{{url('inspecciones/nuevo')}}" class="btn btn-sm btn-info float-right" style="margin-left:10px;"><i class="fa fa-plus"></i> NUEVA INSPECCION</a>
+        <a href="{{url('aeronaves/')}}" class="btn btn-sm btn-dark float-right" style="margin-left:10px;"><i class="fa fa-arrow-left"></i> ATRAS</a>
     </h3>
     <div class="row">
         <div class="col-12">
                 <!-- inicio card  -->
                 <div class="card card-stat">
                     <div class="card-body">
+                        <div class="alert alert-info">
+                            <div class="media">
+                                <img src="{{asset('img/alert-info.png')}}" class="align-self-center mr-3" alt="...">
+                                <div class="media-body">
+                                    <h5 class="mt-0">Nota.-</h5>
+                                    <p>
+                                        <ul>
+                                            <li>
+                                                Las inspecciones proximas a cumplirse se marcan en color <span class>NARANJA</span>. Con 5 horas de antelación.
+                                            </li>
+                                            <li>
+                                                Las inspecciones vencidas se marcan en color ROJO.
+                                            </li>
+                                            <li>
+                                                Las inspecciones con orden abierta o cumplidas se marcan en color VERDE.
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
                         @if($inspecciones->count() == 0)
                         <div class="alert alert-info">
                             <div class="media">
@@ -33,14 +55,22 @@
                                 <tr>
                                     <th>NOMBRE DE LA INSPECCION</th>
                                     <th>DESCRIPCION</th>
-                                    <th>HORA INSPECCION</th>
-                                    <th>HORA MAX INSPECCION</th>
+                                    <th>HORA PROGRAMADA</th>
                                     <th>OPCION</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($inspecciones as $item)
-                                <tr>
+                                @if($item->ordenes->count() > 0)
+                                    <tr class="bg-success">
+                                @else
+                                    @if((round($horas/60,0) > ($item->ins_hora_componente - 5)) &&(round($horas/60,0) < ($item->ins_hora_componente)))
+                                    <tr class="bg-warning">
+                                    @endif
+                                    @if(round($horas/60,0) > ($item->ins_hora_componente))
+                                    <tr class="bg-danger">
+                                    @endif
+                                @endif
                                     <td class="text-center">
                                         {{$item->ins_nombre}}
                                     </td>
@@ -51,22 +81,14 @@
                                         {{$item->ins_hora_componente}}
                                     </td>
                                     <td class="text-center">
-                                        {{$item->ins_hora_componente_max}}
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            OPCION
-                                          </button>
-                                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="{{url('inspecciones/'.Crypt::encryptString($item->ins_id).'/editar')}}"><i class="fa fa-edit"></i> Editar</a>
-                                            @if ($item->ordenes->count() > 0)
-                                            <a class="dropdown-item disabled" href="#" title="La inspeccion tiene registros asociados. NO es posible eliminarlo."><i class="fa fa-trash"></i> Eliminar</a>
+                                        @if((round($horas/60,0) > ($item->ins_hora_componente - 5)) &&(round($horas/60,0) < ($item->ins_hora_componente)) || round($horas/60,0) > ($item->ins_hora_componente))
+                                            @if($aeronave->ae_estado_matricula == 'M')
+                                            <a class="btn btn-sm btn-success" href="{{url('ordenes/'.Crypt::encryptString($aeronave->ae_id).'/apertura')}}"><i class="fa fa-folder-open"></i> ABRIR ORDEN</a>
                                             @else
-                                            <a class="dropdown-item btn-eliminar-item" data-id="{{$item->ins_id}}" data-descripcion="{{$item->ins_nombre}}" data-toggle="modal" data-target="#modal-eliminar-inspeccion" href="#"><i class="fa fa-trash"></i> Eliminar</a>
+                                            <small>Para abrir la orden, debe cambiar el estado de la aeronave a M</small>
+                                            <a class="btn btn-sm btn-secondary" href="{{url('aeronaves/'.Crypt::encryptString($aeronave->ae_id).'/editar_estado')}}"><i class="fa fa-refresh"></i> CAMBIAR ESTADO</a>
                                             @endif
-                                          </div>
-                                        </div>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

@@ -40,7 +40,7 @@ class InspeccionController extends Controller
 
         $aeronave = Aeronave::where('ae_id', $ae_id)->first();
         $componente = Componente::where('com_id', $com_id)->first();
-        $mantenimiento = ConfiguracionMantenimiento::where('cma_id', $com_id)->first();
+        $mantenimiento = ConfiguracionMantenimiento::where('cma_id', $cma_id)->first();
         $inspecciones = Inspeccion::where('cma_id', $cma_id)->get();    
 
         return view('inspecciones.lista_inspecciones_componente', ['titulo'=>'Inspecciones del componente',
@@ -48,6 +48,42 @@ class InspeccionController extends Controller
                                                           'aeronave' => $aeronave,
                                                           'componente' => $componente,
                                                           'mantenimiento' => $mantenimiento,
+                                                          'modulo_activo' => 'aeronaves'
+                                                         ]);
+    }
+
+    public function inspecciones_aeronave($ae_id)
+    {
+        $ae_id = Crypt::decryptString($ae_id);
+
+        $aeronave = Aeronave::where('ae_id', $ae_id)->first();
+        $componentes = $aeronave->componentes;
+
+        $inspecs = collect();
+
+        foreach($componentes as $item){
+            foreach($item->configuraciones_mantenimiento as $kitem){
+                foreach($kitem->inspecciones as $sitem){
+                    $inspecs->push($sitem);
+                }
+            }
+        }
+        $inspecciones = $inspecs->sortBy('ins_hora_componente');        
+
+        $horas = 0;
+        foreach($aeronave->horas_diario as $item){
+            foreach($item->registros_vuelo as $ritem){
+                // echo $ritem;
+                // echo $ritem->rvu_horas_normales;
+                $horas = $horas + $ritem->rvu_normales;
+            }
+        }
+
+        return view('inspecciones.lista_inspecciones_aeronave', ['titulo'=>'Inspecciones aeronave',
+                                                          'aeronave' => $aeronave,
+                                                          'componentes' => $componentes,
+                                                          'inspecciones' => $inspecciones,
+                                                          'horas' => $horas,
                                                           'modulo_activo' => 'aeronaves'
                                                          ]);
     }
@@ -81,7 +117,7 @@ class InspeccionController extends Controller
 
         $aeronave = Aeronave::where('ae_id', $ae_id)->first();
         $componente = Componente::where('com_id', $com_id)->first();
-        $mantenimiento = ConfiguracionMantenimiento::where('cma_id', $com_id)->first();
+        $mantenimiento = ConfiguracionMantenimiento::where('cma_id', $cma_id)->first();
         $servicio = ServicioComponente::where('com_id', $com_id)->latest()->first();
 
         return view('inspecciones.form_nueva_inspeccion_componente', ['titulo'=>$titulo, 
@@ -110,13 +146,15 @@ class InspeccionController extends Controller
         $inspeccion->sec_id = $request->input('sec_id');
         $inspeccion->ins_nombre = $request->input('ins_nombre');
         $inspeccion->ins_descripcion = $request->input('ins_descripcion');
+        $inspeccion->ins_hora_componente = $request->input('ins_hora_componente');
+        $inspeccion->ins_hora_componente_max = $request->input('ins_hora_componente_max');
         $inspeccion->save();
 
-        if(isNull($request->input('cma_id')) || isNull($request->input('cma_id'))){
-            return redirect('inspecciones');
-        }else{
+        // if(isNull($request->input('cma_id'))){
+        //     return redirect('inspecciones');
+        // }else{
             return redirect('aeronaves/'.Crypt::encryptString($request->input('ae_id')).'/componentes/'.Crypt::encryptString($request->input('ae_id')).'/mantenimientos/'.Crypt::encryptString($request->input('cma_id')).'/inspecciones');            
-        }
+        // }
     }
 
     /**

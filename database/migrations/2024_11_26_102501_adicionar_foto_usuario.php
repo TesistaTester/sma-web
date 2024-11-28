@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('unidad_organizacional', function (Blueprint $table) {
-            $table->Increments('uor_id');
-            $table->integer('uor_superior');
-            $table->integer('gru_id')->nullable();
-            $table->text('uor_nombre');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('usuario', function (Blueprint $table) {
+            $table->text('usu_foto')->nullable()->default("default.jpg");
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('unidad_organizacional');
+        Schema::table('usuario', function (Blueprint $table) {
+            $table->dropColumn('usu_foto');
+        });
     }
 };
