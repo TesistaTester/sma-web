@@ -7,7 +7,7 @@
     <h3 class="title-header" style="text-transform: uppercase;">
         <i class="fa fa-id-card"></i>
         {{$titulo}}
-        @if (Auth::user()->rol->rol_codigo == 3)
+        @if (Auth::user()->rol->rol_codigo == 3 || Auth::user()->rol->rol_codigo == 1)
         <a href="{{url('personal/nuevo')}}" class="btn btn-sm btn-info float-right" style="margin-left:10px;"><i class="fa fa-plus"></i> NUEVO PERSONAL</a>
         @endif
     </h3>
@@ -39,7 +39,7 @@
                                     <th>ESPECIALIDAD</th>
                                     <th>NIVEL</th>
                                     <th>CARGO</th>
-                                    @if (Auth::user()->rol->rol_codigo == 3)
+                                    @if (Auth::user()->rol->rol_codigo == 3 || Auth::user()->rol->rol_codigo == 1)
                                     <th>OPCION</th>
                                     @endif
                                 </tr>
@@ -75,7 +75,7 @@
                                         <small class="text-secondary">{{$item->cargo->unidad->uor_nombre}}</small><br>
                                         <sup class="text-info">{{$item->cargo->unidad->grupo->gru_nombre}}</sup>
                                     </td>
-                                    @if (Auth::user()->rol->rol_codigo == 3)
+                                    @if (Auth::user()->rol->rol_codigo == 1 || Auth::user()->rol->rol_codigo == 3)
                                     <td>
                                         <div class="dropdown">
                                           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
